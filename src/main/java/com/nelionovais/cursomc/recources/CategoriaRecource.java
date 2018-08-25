@@ -3,25 +3,27 @@ package com.nelionovais.cursomc.recources;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.omg.CORBA.PRIVATE_MEMBER;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nelionovais.cursomc.domain.Categoria;
+import com.nelionovais.cursomc.services.CategoriaServive;
 
 @RestController
 @RequestMapping(value="/categorias")
 public class CategoriaRecource {
-	@RequestMapping(method=RequestMethod.GET)
-	public List<Categoria> listar() {
-		Categoria cat01 = new Categoria(01, "Informática");
-		Categoria cat02 = new Categoria(02, "Escritório");
-				
-		List<Categoria> lista = new ArrayList<>();
-		lista.add(cat01);
-		lista.add(cat02);
-		
-		return lista;
+	@Autowired
+	private CategoriaServive service;	
+	
+	@RequestMapping(value = "/{id}", method=RequestMethod.GET)//red(crud) ou select(sql)
+	public ResponseEntity<?> find(@PathVariable Integer id) {
+		Categoria obj = service.buscar(id);
+		return ResponseEntity.ok().body(obj);
 	}
 
 }
